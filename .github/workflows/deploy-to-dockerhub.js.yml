@@ -1,11 +1,12 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Node.js CI
+name: CI React
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - 'main'
 
 jobs:
   docker:
@@ -22,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v2.4.0
         with:
           push: true
           tags: oktorakevinarigi/react:latest
