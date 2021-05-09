@@ -36,14 +36,16 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Deploy using ssh
-      uses: appleboy/ssh-action@master
-      with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: 22
-          script: |
-            docker stop $(docker ps -a -q)
-            docker pull oktorakevinarigi/react:latest
-            docker run -dit -p 80:80 oktorakevinarigi/react:latest
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            key: ${{ secrets.PRIVATE_KEY }}
+            port: 22
+            script: |
+              docker stop $(docker ps -a -q --filter ancestor=oktorakevinarigi/react:latest)
+              docker rm $(docker ps -a -q --filter ancestor=oktorakevinarigi/react:latest )
+              docker image rm oktorakevinarigi/react
+              docker pull oktorakevinarigi/react:latest
+              docker run -dit -p 80:80 oktorakevinarigi/react:latest
