@@ -31,8 +31,6 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
   
   deploy:
-    name: Deploy
-    needs: build
     runs-on: ubuntu-latest
 
       steps:
