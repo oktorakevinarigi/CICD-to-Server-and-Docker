@@ -31,20 +31,20 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
   
   deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: production-files
-        path: ./build
+    build:
+      runs-on: ubuntu-latest
 
-    - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Deploy using ssh
+          uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            key: ${{ secrets.PRIVATE_KEY }}
+            port: 22
+            script: |
+              docker stop $(docker ps -a -q)
+              docker pull oktorakevinarigi/react:latest
+              docker run -dit -p 80:80 oktorakevinarigi/react:latest
