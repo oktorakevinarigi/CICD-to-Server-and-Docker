@@ -21,4 +21,4 @@ jobs:
           script: |
             docker stop $(docker ps -a -q)
             docker pull oktorakevinarigi/react:latest
-            docker run -dit -p 5000:80 oktorakevinarigi/react:latest
+            docker run -dit -p 80:80 oktorakevinarigi/react:latest
